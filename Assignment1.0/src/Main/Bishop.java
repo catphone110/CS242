@@ -48,14 +48,14 @@ public class Bishop extends Piece{
         int step_col = (j - this.getCol()) > 0? 1: -1;
         for (int r = this.getRow()+step_row, c = this.getCol()+step_col; r!=i; r+=step_row, c+=step_col){
             if (this.getBoard().chessPieces[r][c]!=null) {
-                System.out.println("r,c = "+r+" "+c);
+                //System.out.println("r,c = "+r+" "+c);
                 return -3;
             }
         }
 
         if (this.getBoard().chessPieces[i][j]!= null) {
             if (this.getBoard().chessPieces[i][j].getColor() != this.getColor()) {
-                System.out.println("same color-piece in destination - check--2");
+                //System.out.println("same color-piece in destination - check--2");
                 return 1;
             }
         }

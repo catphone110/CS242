@@ -16,7 +16,8 @@ import java.util.Deque;
 public class Board {
     Piece [][] chessPieces;
 
-    /* Board coordination:
+    /**
+    * Board coordination:
     * [r 7,c=0]    [r 7,c=1]   [r 7,c=2]   [r 7,c=3]   [r 7,c 4]   [r 7,c=5]   [r 7,c=6]   [r 7,c=7]
     * [r 6,c=0]
     * [r 5,c=0]
@@ -130,11 +131,23 @@ public class Board {
 
                 Deque <Position> possibleMove = new ArrayDeque<Position>();
 
-                if (piece instanceof Bishop){
-                    possibleMove = ((Bishop) piece).potentialMoves();
-                }
-                else if(piece instanceof King){
+                /** if this piece is instanceof King
+                 *  this piece's isChecked() parameter must be new king position!
+                 *  otherwise the return result is false
+                */
+                if(piece instanceof King){
                     possibleMove = ((King) piece).potentialMoves();
+                    for (Position position : possibleMove){
+                        Position oldPosition = new Position(r, c);
+                        Piece removedPiece = movePiece(piece, position);
+                        boolean afterMoveStillChecked = this.isChecked(king.getColor(), position);
+                        undoMovePiece(piece, removedPiece, oldPosition);
+                        if (!afterMoveStillChecked) return false;
+                    }
+                    continue;
+                }
+                else if (piece instanceof Bishop){
+                    possibleMove = ((Bishop) piece).potentialMoves();
                 }
                 else if(piece instanceof Knight){
                     possibleMove = ((Knight) piece).potentialMoves();
@@ -152,12 +165,10 @@ public class Board {
                 // loop through all the potential moves
                 for (Position position : possibleMove){
                     Position oldPosition = new Position(r, c);
-                    // movePiece(Piece piece, Position position)
-                    // undoMovePiece(Piece piece, Piece oldPiece, Position lastPosition)
                     Piece removedPiece = movePiece(piece, position);
                     boolean afterMoveStillChecked = this.isChecked(king.getColor(), new Position(row, col));
-                    if (!afterMoveStillChecked) return false;
                     undoMovePiece(piece, removedPiece, oldPosition);
+                    if (!afterMoveStillChecked) return false;
                 }
             }
         }
@@ -171,13 +182,8 @@ public class Board {
      * @return      true/false
      */
     public boolean checkMate(Piece king){
-        boolean check = isChecked(king.getColor(), new Position(king.getRow(), king.getCol()));
-        //Checked passed in is a King type.
-        int row = king.getRow();
-        int col = king.getCol();
-        check = check && king instanceof King;
-
-        return check;
+        if (!isChecked(king.getColor(), new Position(king.getRow(), king.getCol()))) return false;
+        return staleMate(king);
     }
 
     public Piece getPiece(int row, int col){
@@ -241,6 +247,7 @@ public class Board {
     public boolean kingThread(int opponentColor, int row, int col){
         for (int r_step = -1; r_step < 2; r_step ++){
             for (int c_step = -1; c_step < 2; c_step ++){
+                if (r_step == 0 && c_step == 0) {continue;}
                 Piece king = getPiece(row+r_step, col+c_step);
                 if (king!=null){
                     if ((king instanceof King || king instanceof Queen) && king.getColor() == opponentColor){
@@ -394,7 +401,10 @@ public class Board {
 
     }
 
-
+    /**
+     * Print the current game board
+     * Helpful for me to debug.
+     */
     public void printBoard(){
         System.out.println("======================================================================");
         for (int i = 7; i>-1; i--){
@@ -413,5 +423,4 @@ public class Board {
         }
         System.out.println("======================================================================");
     }
-
 }

@@ -52,14 +52,13 @@ public class Pawn extends Piece{
         if (this.getRow() == i && this.getCol()== j)
             return -2;
 
-
         // check move up/down 1 or two steps
         if (this.getCol() == j && Math.abs(this.getRow()-i)<=2){
             // black color = -1 move row down
             // white color = 1 move row up
             if (i - this.getRow() == this.getColor()){
                 if (this.getBoard().chessPieces[i][j] == null){
-                    System.out.println("running here____1");
+                    //System.out.println("running here____1");
                     return 0;
                 }
                 return -3;
@@ -77,7 +76,6 @@ public class Pawn extends Piece{
                 return 1;
             }
         }
-
         return -4;
     }
 
@@ -87,7 +85,6 @@ public class Pawn extends Piece{
         int col = this.getCol();
         if (judgeMove(row + this.getColor(), col)>=0){
             deque.add(new Position(row + this.getColor(), col));
-
         }
         if (isFirstMove == 1 && judgeMove(row + this.getColor(), col) == 0){
             if (judgeMove(row + this.getColor()*2, col)>=0){
@@ -96,5 +93,4 @@ public class Pawn extends Piece{
         }
         return deque;
     }
-
 }

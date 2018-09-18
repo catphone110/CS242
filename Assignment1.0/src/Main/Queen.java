@@ -56,14 +56,14 @@ public class Queen extends Piece {
             int step_col = (j - this.getCol()) > 0? 1: -1;
             for (int r = this.getRow()+step_row, c = this.getCol()+step_col; r!=i; r+=step_row, c+=step_col){
                 if (this.getBoard().chessPieces[r][c]!=null) {
-                    System.out.println("r,c = "+r+" "+c);
+                    //System.out.println("r,c = "+r+" "+c);
                     return -3;
                 }
             }
 
             if (this.getBoard().chessPieces[i][j]!= null) {
                 if (this.getBoard().chessPieces[i][j].getColor() != this.getColor()) {
-                    System.out.println("same color-piece in destination - check--1");
+                    //System.out.println("same color-piece in destination - check--1");
                     return 1;
                 }
             }
@@ -74,7 +74,7 @@ public class Queen extends Piece {
                 int step = (i - this.getRow()) > 0 ? 1 : -1;
                 for (int r = this.getRow()+step; r!= i; r+=step){
                     if (this.getBoard().chessPieces[r][j]!= null){
-                        System.out.println("hereh----2");
+                        //System.out.println("hereh----2");
                         return -3;
                     }
                 }

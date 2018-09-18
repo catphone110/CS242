@@ -6,7 +6,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BoardTest {
     @Test
     public void testStartingBoard() {
+        Board board  = new Board();
+        board.startingBoard();
     }
+
     @Test
     public void testPutPieceOnBoard() {
         Board board  = new Board();
@@ -32,8 +35,12 @@ public class BoardTest {
         assertEquals(p1.getRow(), 3);
         assertEquals(p1.getCol(), 4);
     }
+
     @Test
     public void testStaleMate() {
+        /*
+         * Test 1
+         */
         Board board  = new Board();
         board.startingBoard();
         board.printBoard();
@@ -41,10 +48,83 @@ public class BoardTest {
         boolean result = board.staleMate(king);
         assertFalse(result);
 
+        /*
+         * Test 2
+         */
         Board board1  = new Board();
-        board.printBoard();
-        
+        Piece k = new King(-1, new Position(0,0), board1);
+        Piece r = new Rook(1, new Position(1,1), board1);
+        Piece q = new Queen(1, new Position(2,2), board1);
+        board1.putPieceOnBoard(k.getRow(), k.getCol(), k);
+        board1.putPieceOnBoard(r.getRow(), r.getCol(), r);
+        board1.putPieceOnBoard(q.getRow(), q.getCol(), q);
+        board1.printBoard();
+        assertTrue(board1.staleMate(k));
+        /*
+         * Test 3
+         */
+        Board board2  = new Board();
+        Piece k1 = new King(1, new Position(4,2), board1);
+        Piece p2 = new Queen(1, new Position(3,5), board1);
+        board2.putPieceOnBoard(k1.getRow(), k1.getCol(), k1);
+        board2.putPieceOnBoard(p2.getRow(), p2.getCol(), p2);
+        board2.printBoard();
+        assertFalse(board2.staleMate(k1));
+        board2.removePieceFromBorad(p2.getRow(), p2.getCol());
+        /*
+         * Test 4
+         */
+        Piece p1 = new Knight(1, new Position(6,6), board1);
+        Piece p3 = new Pawn(1, new Position(2,2), board1);
+        board2.putPieceOnBoard(p1.getRow(), p1.getCol(), p1);
+        board2.putPieceOnBoard(p3.getRow(), p3.getCol(), p3);
+        assertFalse(board2.staleMate(k1));
+        board2.removePieceFromBorad(p1.getRow(), p1.getCol());
+        board2.removePieceFromBorad(p3.getRow(), p3.getCol());
+        /*
+         * Test 5
+         */
+        Piece p4 = new Bishop(1, new Position(5,1), board1);
+        Piece p5 = new Rook(1, new Position(2,6), board1);
+        board2.putPieceOnBoard(p4.getRow(), p4.getCol(), p4);
+        board2.putPieceOnBoard(p5.getRow(), p5.getCol(), p5);
+        assertFalse(board2.staleMate(k1));
+        board2.removePieceFromBorad(p4.getRow(), p4.getCol());
+        board2.removePieceFromBorad(p5.getRow(), p5.getCol());
 
+        /*
+         * Test 6
+         */
+        Piece p6 = new Bishop(1, new Position(5,1), board1);
+        board2.putPieceOnBoard(p6.getRow(), p6.getCol(), p6);
+        assertFalse(board2.staleMate(k1));
+        board2.removePieceFromBorad(p6.getRow(), p6.getCol());
+    }
+
+    @Test
+    public void testCheckMate() {
+        /*
+         * Test 1
+         */
+        Board board  = new Board();
+        board.startingBoard();
+        board.printBoard();
+        Piece king = board.getPiece(7,3);
+        boolean result = board.checkMate(king);
+        assertFalse(result);
+
+        /*
+         * Test 2
+         */
+        Board board1  = new Board();
+        board.startingBoard();
+        Piece k1 = new King(1, new Position(4,2), board1);
+        Piece p2 = new Queen(-1, new Position(4,3), board1);
+        board1.putPieceOnBoard(k1.getRow(), k1.getCol(), k1);
+        board1.putPieceOnBoard(p2.getRow(), p2.getCol(), p2);
+        board1.printBoard();
+        boolean result1 = board1.checkMate(k1);
+        assertFalse(result1);
 
     }
 
@@ -65,8 +145,8 @@ public class BoardTest {
         assertEquals(board.getPiece(p1.getRow(), p1.getCol()), p1);
 
     }
-    @Test
 
+    @Test
     public void testRemovePieceFromBorad() {
         Board board = new Board();
         Piece p1 = new Rook(-1, new Position(0,3), board);
@@ -75,6 +155,7 @@ public class BoardTest {
         board.removePieceFromBorad(p1.getRow(),p1.getCol());
         assertNull(board.getPiece(p1.getRow(), p1.getCol()));
     }
+
     @Test
     public void testGetPiece() {
         Board board = new Board();
@@ -82,6 +163,7 @@ public class BoardTest {
         board.putPieceOnBoard(p1.getRow(), p1.getCol(), p1);
         assertEquals(board.getPiece(p1.getRow(),p1.getCol()), p1);
     }
+
     @Test
     public void testIsChecked() {
         Board board = new Board();
@@ -115,6 +197,7 @@ public class BoardTest {
         assertTrue(check_k3);
         assertFalse(check_k4);
     }
+
     @Test
     public void testPawnThread() {
         Board board = new Board();
@@ -143,6 +226,7 @@ public class BoardTest {
         assertTrue(board.pawnThread(-1*king3.getColor(),king3.getRow(),king3.getCol()));
 
     }
+
     @Test
     public void testKingThread() {
         Board board = new Board();
@@ -172,6 +256,7 @@ public class BoardTest {
         assertFalse(board.kingThread(-1*p1.getColor(),p1.getRow(),p1.getCol()));
 
     }
+
     @Test
     public void testKnightThread() {
         Board board = new Board();
@@ -199,6 +284,7 @@ public class BoardTest {
         //false
         assertFalse(board.knightThread(-1*k3.getColor(),k3.getRow(),k3.getCol()));
     }
+
     @Test
     public void testBishopQueenThread() {
         Board board = new Board();
@@ -230,6 +316,7 @@ public class BoardTest {
         //true
         assertTrue(board.bishopQueenThread(-1*k3.getColor(),k3.getRow(),k3.getCol()));
     }
+
     @Test
     public void testRookQueenThread() {
         Board board = new Board();
@@ -260,7 +347,10 @@ public class BoardTest {
         //true
         assertTrue(board.rookQueenThread(-1*k3.getColor(),k3.getRow(),k3.getCol()));
     }
+
     @Test
     public void testPrintBoard() {
+        Board board = new Board();
+        board.printBoard();
     }
 }

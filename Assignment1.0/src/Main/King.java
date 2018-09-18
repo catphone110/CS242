@@ -36,7 +36,6 @@ public class King extends Piece{
         if (this.getBoard().chessPieces[i][j]==null)
             return 0;
 
-
         if (this.getBoard().chessPieces[i][j].getColor() == this.getColor()) {
             return -3;
         }
@@ -58,6 +57,10 @@ public class King extends Piece{
                     deque.add(new Position(row+r_step, col+c_step));
                 }
             }
+        }
+        //System.out.println("King's potential move");
+        for (Position p: deque){
+            //System.out.println(p.getRow()+""+ p.getCol());
         }
         return deque;
     }

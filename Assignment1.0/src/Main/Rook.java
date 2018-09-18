@@ -58,8 +58,7 @@ public class Rook extends Piece{
             int step = (j - this.getCol()) > 0 ? 1 : -1;
             for (int c = this.getCol()+step; c!= j; c+=step){
                 if (this.getBoard().chessPieces[i][c]!=null) {
-
-                    System.out.println("hereh----3");
+                    //System.out.println("hereh----3");
                     return -3;
                 }
             }

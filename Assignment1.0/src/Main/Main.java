@@ -18,10 +18,6 @@ public class Main {
          *              -4: invalid moving range
          */
 
-        System.out.println("Hello World!");
-
-
-
         /*
         // test Root-1
         System.out.println("Hello World!");
@@ -355,19 +351,6 @@ public class Main {
         //true
         System.out.println(board.rookQueenThread(-1*k3.getColor(),k3.getRow(),k3.getCol()));
         */
-
-
-
-        for (int i = -1; i<2; i++){
-            for(int j = -1; j<2; j++){
-                if(i==0 && j==0) continue;
-                System.out.println(i+" "+j);
-            }
-        }
-
-
-
-
 
 
     }
