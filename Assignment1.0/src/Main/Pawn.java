@@ -1,5 +1,8 @@
 package Main;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class Pawn extends Piece{
     // !!!!! ATTENTION !!!!!
     // !!!!! must remember to set isFirstMove = 0 !!! at any other move!! of PAWN
@@ -59,7 +62,6 @@ public class Pawn extends Piece{
                     System.out.println("running here____1");
                     return 0;
                 }
-
                 return -3;
             }
             if (this.isFirstMove == 1 && i - this.getRow() == this.getColor() * 2){
@@ -77,6 +79,22 @@ public class Pawn extends Piece{
         }
 
         return -4;
+    }
+
+    public Deque<Position> potentialMoves(){
+        Deque<Position> deque = new ArrayDeque<Position>();
+        int row = this.getRow();
+        int col = this.getCol();
+        if (judgeMove(row + this.getColor(), col)>=0){
+            deque.add(new Position(row + this.getColor(), col));
+
+        }
+        if (isFirstMove == 1 && judgeMove(row + this.getColor(), col) == 0){
+            if (judgeMove(row + this.getColor()*2, col)>=0){
+                deque.add(new Position(row + this.getColor()*2, col));
+            }
+        }
+        return deque;
     }
 
 }

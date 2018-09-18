@@ -1,5 +1,8 @@
 package Main;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class Bishop extends Piece{
     public Bishop(int color, Position position, Board board){
          /* Piece is the super class
@@ -37,7 +40,6 @@ public class Bishop extends Piece{
 
         if (this.getBoard().chessPieces[i][j]!= null) {
             if (this.getBoard().chessPieces[i][j].getColor() == this.getColor()) {
-                System.out.println("same color-piece in destination - check--1");
                 return -3;
             }
         }
@@ -58,6 +60,41 @@ public class Bishop extends Piece{
             }
         }
         return 0;
+    }
+
+    public Deque<Position> potentialMoves(){
+        Deque<Position> deque = new ArrayDeque<Position>();
+        int row = this.getRow();
+        int col = this.getCol();
+        // upper left
+        for (int r_step = 1, c_step = -1; row + r_step < 8 && col + c_step > -1; r_step ++, c_step --){
+            if (judgeMove(row+r_step, col+c_step)>=0){
+                deque.add(new Position(row+r_step, col+c_step));
+                if (this.getBoard().chessPieces[row+r_step][col+c_step]!=null) {break;}
+            }
+        }
+        // upper right
+        for (int r_step = 1, c_step = 1; row + r_step < 8 && col + c_step < 8; r_step ++, c_step ++){
+            if (judgeMove(row+r_step, col+c_step)>=0){
+                deque.add(new Position(row+r_step, col+c_step));
+                if (this.getBoard().chessPieces[row+r_step][col+c_step]!=null) {break;}
+            }
+        }
+        // lower left
+        for (int r_step = -1, c_step = -1; row + r_step > -1 && col + c_step > -1; r_step --, c_step --){
+            if (judgeMove(row+r_step, col+c_step)>=0){
+                deque.add(new Position(row+r_step, col+c_step));
+                if (this.getBoard().chessPieces[row+r_step][col+c_step]!=null) {break;}
+            }
+        }
+        // lower right
+        for (int r_step = -1, c_step = 1; row + r_step > -1 && col + c_step < 8; r_step --, c_step ++){
+            if (judgeMove(row+r_step, col+c_step)>=0){
+                deque.add(new Position(row+r_step, col+c_step));
+                if (this.getBoard().chessPieces[row+r_step][col+c_step]!=null) {break;}
+            }
+        }
+            return deque;
     }
 
 

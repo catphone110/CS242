@@ -1,5 +1,8 @@
 package Main;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class Queen extends Piece {
 
     public Queen(int color, Position position, Board board){
@@ -43,7 +46,6 @@ public class Queen extends Piece {
         // Destination occupied by same color piece
         if (this.getBoard().chessPieces[i][j]!= null) {
             if (this.getBoard().chessPieces[i][j].getColor() == this.getColor()) {
-                System.out.println("same color-piece in destination - check--1");
                 return -3;
             }
         }
@@ -81,8 +83,6 @@ public class Queen extends Piece {
                 int step = (j - this.getCol()) > 0 ? 1 : -1;
                 for (int c = this.getCol()+step; c!= j; c+=step){
                     if (this.getBoard().chessPieces[i][c]!=null) {
-
-                        System.out.println("hereh----3");
                         return -3;
                     }
                 }
@@ -96,5 +96,71 @@ public class Queen extends Piece {
             }
             return 0;
         }
+    }
+
+    public Deque<Position> potentialMoves(){
+        Deque<Position> deque = new ArrayDeque<Position>();
+        int row = this.getRow();
+        int col = this.getCol();
+
+        // Bishop pattern
+        // upper left
+        for (int r_step = 1, c_step = -1; row + r_step < 8 && col + c_step > -1; r_step ++, c_step --){
+            if (judgeMove(row+r_step, col+c_step)>=0){
+                deque.add(new Position(row+r_step, col+c_step));
+                if (this.getBoard().chessPieces[row+r_step][col+c_step]!=null) {break;}
+            }
+        }
+        // upper right
+        for (int r_step = 1, c_step = 1; row + r_step < 8 && col + c_step < 8; r_step ++, c_step ++){
+            if (judgeMove(row+r_step, col+c_step)>=0){
+                deque.add(new Position(row+r_step, col+c_step));
+                if (this.getBoard().chessPieces[row+r_step][col+c_step]!=null) {break;}
+            }
+        }
+        // lower left
+        for (int r_step = -1, c_step = -1; row + r_step > -1 && col + c_step > -1; r_step --, c_step --){
+            if (judgeMove(row+r_step, col+c_step)>=0){
+                deque.add(new Position(row+r_step, col+c_step));
+                if (this.getBoard().chessPieces[row+r_step][col+c_step]!=null) {break;}
+            }
+        }
+        // lower right
+        for (int r_step = -1, c_step = 1; row + r_step > -1 && col + c_step < 8; r_step --, c_step ++){
+            if (judgeMove(row+r_step, col+c_step)>=0){
+                deque.add(new Position(row+r_step, col+c_step));
+                if (this.getBoard().chessPieces[row+r_step][col+c_step]!=null) {break;}
+            }
+        }
+        // Rook pattern
+        // upper
+        for (int r_step = 1 ; row + r_step < 8 ; r_step ++) {
+            if (judgeMove(row+r_step, col)>=0){
+                deque.add(new Position(row+r_step, col));
+                if (this.getBoard().chessPieces[row+r_step][col]!=null) {break;}
+            }
+        }
+        // lower
+        for (int r_step = -1 ; row + r_step >-1; r_step --) {
+            if (judgeMove(row+r_step, col)>=0){
+                deque.add(new Position(row+r_step, col));
+                if (this.getBoard().chessPieces[row+r_step][col]!=null) {break;}
+            }
+        }
+        // left
+        for (int c_step = -1; col + c_step >= 0; c_step --) {
+            if (judgeMove(row, col+c_step)>=0){
+                deque.add(new Position(row, col+c_step));
+                if (this.getBoard().chessPieces[row][col+c_step]!=null) {break;}
+            }
+        }
+        // right
+        for (int c_step = 1; col + c_step <= 7 ; c_step ++) {
+            if (judgeMove(row, col+c_step)>=0){
+                deque.add(new Position(row, col+c_step));
+                if (this.getBoard().chessPieces[row][col+c_step]!=null) {break;}
+            }
+        }
+        return deque;
     }
 }

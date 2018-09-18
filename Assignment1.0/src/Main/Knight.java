@@ -1,5 +1,8 @@
 package Main;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class Knight extends Piece{
     public Knight(int color, Position position, Board board){
          /* Piece is the super class
@@ -47,6 +50,26 @@ public class Knight extends Piece{
             return 1;
 
         // valid and nothing happened
+    }
+
+    public Deque<Position> potentialMoves(){
+        Deque<Position> deque = new ArrayDeque<Position>();
+        int row = this.getRow();
+        int col = this.getCol();
+
+        int [] rowSteps = {-2, -1, 1, 2};
+        int [] colSteps = {-2, -1, 1, 2};
+        for (int r_step : rowSteps){
+            for (int c_step : colSteps){
+                // knight's possible move
+                if (Math.abs(r_step)+Math.abs(c_step)==3){
+                    if (judgeMove(row+r_step, col+c_step)>=0){
+                        deque.add(new Position(row+r_step, col+c_step));
+                    }
+                }
+            }
+        }
+        return deque;
     }
 
 

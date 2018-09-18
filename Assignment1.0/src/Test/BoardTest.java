@@ -2,12 +2,16 @@ import Main.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+
 public class BoardTest {
     @Test
     public void testStartingBoard() {
     }
     @Test
     public void testPutPieceOnBoard() {
+        Board board  = new Board();
+        board.startingBoard();
+        assertTrue(board.getPiece(0,0) instanceof Rook);
     }
 
     @Test
@@ -28,6 +32,22 @@ public class BoardTest {
         assertEquals(p1.getRow(), 3);
         assertEquals(p1.getCol(), 4);
     }
+    @Test
+    public void testStaleMate() {
+        Board board  = new Board();
+        board.startingBoard();
+        board.printBoard();
+        Piece king = board.getPiece(0,3);
+        boolean result = board.staleMate(king);
+        assertFalse(result);
+
+        Board board1  = new Board();
+        board.printBoard();
+        
+
+
+    }
+
     @Test
     public void testMovePiece() {
         Board board  = new Board();

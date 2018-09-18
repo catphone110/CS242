@@ -1,5 +1,6 @@
 package Main;
 import java.util.ArrayDeque;
+import java.util.Deque;
 
 /*
 * stalemate 就是先check King 下一步是不是checkmate
@@ -108,29 +109,74 @@ public class Board {
     }
 
     /**
+     * This function will check the given king's player is in stalemate condition
+     * @param  king the king piece
+     * @return      true/false
+     */
+    public boolean staleMate(Piece king){
+        // Default condition: king is on check
+        int color = king.getColor();
+        int row = king.getRow();
+        int col = king.getCol();
+        // loop through the board to check all-same-color piece's all possible movement's
+        // will any of the movement not put king on check.
+        for (int r = 0; r<8; r++){
+            for(int c = 0; c<8; c++){
+                Piece piece = getPiece(r,c);
+                // skip if empty
+                if (piece == null){ continue; }
+                // skip those same color pieces
+                if (piece.getColor() != color){ continue; }
+
+                Deque <Position> possibleMove = new ArrayDeque<Position>();
+
+                if (piece instanceof Bishop){
+                    possibleMove = ((Bishop) piece).potentialMoves();
+                }
+                else if(piece instanceof King){
+                    possibleMove = ((King) piece).potentialMoves();
+                }
+                else if(piece instanceof Knight){
+                    possibleMove = ((Knight) piece).potentialMoves();
+                }
+                else if(piece instanceof Pawn){
+                    possibleMove = ((Pawn) piece).potentialMoves();
+                }
+                else if(piece instanceof Queen){
+                    possibleMove = ((Queen) piece).potentialMoves();
+                }
+                else if(piece instanceof Rook){
+                    possibleMove = ((Rook) piece).potentialMoves();
+                }
+
+                // loop through all the potential moves
+                for (Position position : possibleMove){
+                    Position oldPosition = new Position(r, c);
+                    // movePiece(Piece piece, Position position)
+                    // undoMovePiece(Piece piece, Piece oldPiece, Position lastPosition)
+                    Piece removedPiece = movePiece(piece, position);
+                    boolean afterMoveStillChecked = this.isChecked(king.getColor(), new Position(row, col));
+                    if (!afterMoveStillChecked) return false;
+                    undoMovePiece(piece, removedPiece, oldPosition);
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
      * This function will check if one king is in check-mate condition (if yes end game)
+     * precondition of check-mate : king must be checked!
      * @param  king the king piece
      * @return      true/false
      */
     public boolean checkMate(Piece king){
-        boolean check = true;//isChecked(king.getColor(), new Position(king.getRow(), king.getCol()));
+        boolean check = isChecked(king.getColor(), new Position(king.getRow(), king.getCol()));
         //Checked passed in is a King type.
         int row = king.getRow();
         int col = king.getCol();
         check = check && king instanceof King;
-        for (int r_step = -1; r_step < 2; r_step ++){
-            for (int c_step = -1; c_step < 2; c_step ++){
-                int isValid = ((King) king).judgeMove(row+r_step, col+c_step);
-                // if can move to this step
-                if (isValid>=0){
-                    Position oldPosition = new Position(row, col);
-                    Piece oldPiece = this.movePiece(king, new Position(row+r_step, col+c_step));
-                    check = check && this.isChecked(king.getColor(), new Position(king.getRow(), king.getCol()));
-                    this.undoMovePiece(king, oldPiece, oldPosition);
-                }
-                // if can not check  =  (check && true);
-            }
-        }
+
         return check;
     }
 
@@ -358,8 +404,7 @@ public class Board {
                     name = name.substring(5);
                     if (name.length()<8)
                         System.out.print(name+"\t\t");
-                    else
-                        System.out.print(name+"\t");
+                    else System.out.print(name+"\t");
                 }
                 else
                     System.out.print("["+i+"  "+j+"]\t\t");

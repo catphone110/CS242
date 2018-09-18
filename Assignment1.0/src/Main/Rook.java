@@ -1,5 +1,8 @@
 package Main;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class Rook extends Piece{
 
     public Rook(int color, Position position, Board board){
@@ -70,6 +73,41 @@ public class Rook extends Piece{
             }
         }
         return 0;
+    }
+    public Deque<Position> potentialMoves(){
+        Deque<Position> deque = new ArrayDeque<Position>();
+        int row = this.getRow();
+        int col = this.getCol();
+
+        // upper
+        for (int r_step = 1 ; row + r_step < 8 ; r_step ++) {
+            if (judgeMove(row+r_step, col)>=0){
+                deque.add(new Position(row+r_step, col));
+                if (this.getBoard().chessPieces[row+r_step][col]!=null) {break;}
+            }
+        }
+        // lower
+        for (int r_step = -1 ; row + r_step >-1; r_step --) {
+            if (judgeMove(row+r_step, col)>=0){
+                deque.add(new Position(row+r_step, col));
+                if (this.getBoard().chessPieces[row+r_step][col]!=null) {break;}
+            }
+        }
+        // left
+        for (int c_step = -1; col + c_step >= 0; c_step --) {
+            if (judgeMove(row, col+c_step)>=0){
+                deque.add(new Position(row, col+c_step));
+                if (this.getBoard().chessPieces[row][col+c_step]!=null) {break;}
+            }
+        }
+        // right
+        for (int c_step = 1; col + c_step <= 7 ; c_step ++) {
+            if (judgeMove(row, col+c_step)>=0){
+                deque.add(new Position(row, col+c_step));
+                if (this.getBoard().chessPieces[row][col+c_step]!=null) {break;}
+            }
+        }
+        return deque;
     }
 
 }

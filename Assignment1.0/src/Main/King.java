@@ -1,4 +1,5 @@
 package Main;
+import java.util.*;
 
 public class King extends Piece{
 
@@ -43,6 +44,22 @@ public class King extends Piece{
             return 1;
 
         // valid and nothing happened
+    }
+
+    public Deque<Position> potentialMoves(){
+        Deque<Position> deque = new ArrayDeque<Position>();
+        int row = this.getRow();
+        int col = this.getCol();
+
+        for (int r_step = -1; r_step < 2; r_step ++) {
+            for (int c_step = -1; c_step < 2; c_step++) {
+                if (r_step == 0 && c_step == 0) continue;
+                if (judgeMove(row+r_step, col+c_step)>=0){
+                    deque.add(new Position(row+r_step, col+c_step));
+                }
+            }
+        }
+        return deque;
     }
 
 }

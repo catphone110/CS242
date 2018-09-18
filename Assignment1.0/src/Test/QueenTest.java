@@ -1,5 +1,7 @@
 import Main.*;
 import java.lang.Object;
+import java.util.Deque;
+
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -61,5 +63,25 @@ public class QueenTest{
         assertEquals(((Queen) queen).judgeMove(5,0), -3);
         assertEquals(((Queen) queen).judgeMove(5,5), -4);
     }
+    @Test
+    public void testPotentialMove() {
+        Board test = new Board();
+        Piece king1 = new King(1, new Position(1,2), test);
+        Piece king2 = new King(-1, new Position(1,1), test);
+        Piece king3 = new King(1, new Position(2,3), test);
 
+        Piece queen = new Queen(-1, new Position(3,2), test);
+        test.putPieceOnBoard(king1.getRow(), king1.getCol(), king1);
+        test.putPieceOnBoard(king2.getRow(), king2.getCol(), king2);
+        test.putPieceOnBoard(king3.getRow(), king3.getCol(), king3);
+        test.putPieceOnBoard(queen.getRow(), queen.getCol(), queen);
+        test.printBoard();
+
+        Deque<Position> positionsQue = ((Queen) queen).potentialMoves();
+        //Deque<Position> positionsQue1 = ((Bishop) bishop1).potentialMoves();
+
+        for (Position pos : positionsQue){
+            System.out.println(pos.getRow()+" "+pos.getCol());
+        }
+    }
 }
